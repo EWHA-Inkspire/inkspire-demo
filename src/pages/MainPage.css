@@ -1,0 +1,79 @@
+/* MainPage.css */
+
+.main-page {
+    text-align: center;
+    padding: 10px 20%;
+}
+
+.profile-info {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.profile-info h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.profile-info p, h4 {
+    text-align: left;
+    font-size: 16px;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.profile-info button {
+    background-color: #EBE3D5; /* 변경된 부분: 연한 회색으로 */
+    color: #776B5D;
+    margin-bottom: 5px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile-info button:hover {
+  background-color: #DFD7BF; /* 변경된 부분: 더 어두운 회색으로 */
+}
+
+.player-input {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.player-input h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.player-input input {
+    width: 98%;
+    margin: 5px 0;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    outline: none;
+}
+
+.player-input button {
+    background-color: #B0A695;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.player-input button:hover {
+    background-color: #776B5D;
+}
