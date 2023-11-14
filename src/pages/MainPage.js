@@ -5,7 +5,7 @@ import './MainPage.css';
 
 function MainPage() {
     const [error, setError] = useState(null);
-    const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
+    const authToken = localStorage.getItem('authToken');
     const movePage = useNavigate();
 
     const [profileData, setProfileData] = useState({
@@ -43,6 +43,13 @@ function MainPage() {
             console.error('프로필 정보를 불러오는 데 실패했습니다:', error);
         });
     }, [authToken]);
+
+    const handleLogout = () => {
+        // 로컬 스토리지에서 인증 토큰 제거
+        localStorage.removeItem('authToken');
+        // 페이지 이동
+        movePage('/');
+    };
 
     const characterSubmit = () => {
         // 입력된 캐릭터 정보를 서버로 전송
@@ -138,12 +145,15 @@ function MainPage() {
                             <div>
                                 <h4>캐릭터 목록</h4>
                                 {profileData.characters.map((character, index) => (
-                                    <button key={index} onClick={() => handleCharacterClick(character)}>
+                                    <button className="character-button" key={index} onClick={() => handleCharacterClick(character)}>
                                         {character.name}
                                     </button>
                                 ))}
                             </div>
                         </div>
+                    )}
+                    {authToken && (
+                        <button className="logout-button" onClick={handleLogout}>로그아웃</button>
                     )}
                 </div>
             ) : (

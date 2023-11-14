@@ -24,8 +24,23 @@
     padding: 5px;
 }
 
-.profile-info button {
-    background-color: #EBE3D5; /* 변경된 부분: 연한 회색으로 */
+.profile-info button.logout-button {
+    background-color: #B0A695;
+    color: #fff;
+    margin-bottom: 5px;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile-info button.logout-button:hover {
+    background-color: #776B5D;
+}
+
+.profile-info button.character-button {
+    background-color: #EBE3D5;
     color: #776B5D;
     margin-bottom: 5px;
     border: none;
@@ -36,7 +51,7 @@
 }
 
 .profile-info button:hover {
-  background-color: #DFD7BF; /* 변경된 부분: 더 어두운 회색으로 */
+  background-color: #DFD7BF;
 }
 
 .player-input {
