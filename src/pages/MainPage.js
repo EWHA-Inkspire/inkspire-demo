@@ -16,10 +16,10 @@ function MainPage() {
     const [characterData, setCharacterData] = useState({
         name: ''
     });
-    const [scriptData, setScriptData] = useState({
+    const [scriptData, setScriptData] = useState([{
         background: '',
         genre: '',
-    });
+    }]);
 
     const loadProfile = useCallback(() => {
         // 서버에서 프로필 정보 불러오기
@@ -51,7 +51,8 @@ function MainPage() {
         movePage('/');
     };
 
-    const characterSubmit = () => {
+    // 캐릭터 정보 & 스크립트 기본 배경 설정
+    const handleSubmit = () => {
         // 입력된 캐릭터 정보를 서버로 전송
         axios.post('http://127.0.0.1:8000/account/character', characterData, {
             headers: {
@@ -86,12 +87,56 @@ function MainPage() {
             const data = response.data.data;
             console.log('스크립트 정보가 성공적으로 제출되었습니다:', data);
 
+            gptSubmit(data);
+        })
+        .catch((error) => {
+            console.error('스크립트 정보 제출 중 오류 발생:', error);
+        });
+    };
+
+    const gptSubmit = (data) => {
+
+        const script_id = data.script_id;
+        const town = data.town;
+        const town_detail = data.town_detail;
+
+        console.log(town);
+        console.log(town_detail);
+
+        // 입력된 정보 서버로 전송
+        axios.post(`http://127.0.0.1:8000/scenario/script/${script_id}/chat`, {
+            role : 'assistant',
+            query : `안녕하세요 ${characterData.name}님. 지금부터 당신을 ${town}에 초대합니다.`
+        }, {
+            headers: {
+                Authorization: `Token ${authToken}`
+            }
+        })
+        .catch((error) => {
+            console.error('gpt 정보 제출 중 오류 발생:', error);
+        });
+
+        // 입력된 정보 서버로 전송
+        axios.post(`http://127.0.0.1:8000/scenario/script/${script_id}/chat`, {
+            role: 'assistant',
+            query: town_detail
+        }, {
+            headers: {
+                Authorization: `Token ${authToken}`
+            }
+        })
+        .then((response) => {
+            // 서버에서 응답 처리
+            const data = response.data.data;
+            console.log('gpt 정보가 성공적으로 제출되었습니다.:', data);
+            
             // 입력 폼 초기화
             setCharacterData({
                 name: ''
             });
 
             setScriptData({
+                characterName: '',
                 background: '',
                 genre: ''
             });
@@ -99,20 +144,14 @@ function MainPage() {
             loadProfile();
         })
         .catch((error) => {
-            console.error('스크립트 정보 제출 중 오류 발생:', error);
+            console.error('gpt 정보 제출 중 오류 발생:', error);
         });
-    };
-
-    // 캐릭터 정보 & 스크립트 기본 배경 설정
-    const handleSubmit = () => {
-        // 스크립트에 속하는 캐릭터 생성
-        characterSubmit();
-    };
+    }
 
     // 클릭된 캐릭터의 세부 정보를 표시하는 함수
     const handleCharacterClick = (character) => {
         console.log('선택된 캐릭터:', character);
-        // 여기에서 선택된 캐릭터에 대한 세부 정보를 표시하거나 추가적인 동작을 수행할 수 있습니다.
+
         movePage('/script', {
             state: {
                 characterId: `${character.character_id}`,
@@ -166,7 +205,10 @@ function MainPage() {
                     type="text"
                     placeholder="캐릭터 이름"
                     value={characterData.name}
-                    onChange={(e) => setCharacterData({ ...characterData, name: e.target.value })}
+                    onChange={(e) => {
+                        setCharacterData({ ...characterData, name: e.target.value })
+                        setScriptData({...scriptData, characterName: e.target.value })
+                    }}
                 />
                 <input
                     type="text"

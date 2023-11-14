@@ -31,6 +31,10 @@ function LoginPage() {
         })
   };
 
+  const handleSignup = () => {
+    movePage('/signup');
+  };
+
   return (
     <div className="login-page">
       <h2>Login</h2>
@@ -48,6 +52,7 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button onClick={handleLogin}>Login</button>
+        <button onClick={handleSignup}>회원가입</button> 
       </div>
     </div>
   );
