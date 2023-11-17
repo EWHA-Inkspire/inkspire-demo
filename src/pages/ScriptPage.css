@@ -11,7 +11,7 @@
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 20px;
-    max-height: 300px;
+    max-height: 500px;
     overflow-y: auto;
 }
 
@@ -40,7 +40,7 @@
     margin-top: 20px;
 }
 
-input[type="text"] {
+.user-input input[type="text"] {
     flex: 1;
     padding: 10px;
     margin-right: 10px;
@@ -49,7 +49,7 @@ input[type="text"] {
     font-size: 14px;
 }
 
-button {
+.user-input button {
     padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
