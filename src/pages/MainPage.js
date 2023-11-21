@@ -13,27 +13,26 @@ function MainPage() {
         'characters' : []
     });
 
-    const loadProfile = useCallback(() => {
-        // 서버에서 프로필 정보 불러오기
-        axios.get('http://127.0.0.1:8000/account/user/profile', {
-            headers: {
-                Authorization: `Token ${authToken}`
-            }
-        })
-        .then((response) => {
+    const loadProfile = useCallback(async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/account/user/profile', {
+                headers: {
+                    Authorization: `Token ${authToken}`
+                }
+            });
+
             const data = response.data.data;
             setProfileData({
-                'nickname' : data.nickname,
-                'email' : data.email,
-                'characters' : data.characters
+                'nickname': data.nickname,
+                'email': data.email,
+                'characters': data.characters
             });
             setError(null);
             console.log(data);
-        })
-        .catch((error) => {
+        } catch (error) {
             setError('프로필 정보를 불러오는 데 실패했습니다');
             console.error('프로필 정보를 불러오는 데 실패했습니다:', error);
-        });
+        }
     }, [authToken]);
 
     useEffect(() => {

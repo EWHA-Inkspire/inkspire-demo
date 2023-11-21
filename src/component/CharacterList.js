@@ -27,8 +27,8 @@ const CharacterList = ({ characters, authToken }) => {
                 headers: {
                     Authorization: `Token ${authToken}`
                 }
-            }).
-            then((response) => {
+            })
+            .then((response) => {
                 const data = response.data.data;
                 console.log(data);
                 let chapters = data.map(item => item.chapter); // 각 JSON 객체의 chapter를 추출하여 배열로 저장
@@ -97,12 +97,12 @@ const CharacterList = ({ characters, authToken }) => {
             {characters.map((character, index) => (
                 <div key={index}>
                     <div>
-                        <p className="triangle-toggle" onClick={() => handleCharacterClick(character)}>
+                        <div className="triangle-toggle" onClick={() => handleCharacterClick(character)}>
                             {isScriptOpen ? '▼' : '▶'} {/* 열려있으면 ▼, 닫혀있으면 ▶ */}
                             <div className="character" >
                                 {character.name}
                             </div>
-                        </p>
+                        </div>
                         {displayScriptInfo()}
                     </div>
                 </div>
