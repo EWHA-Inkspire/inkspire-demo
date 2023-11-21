@@ -5,7 +5,7 @@ import axios from 'axios';
 const CharacterList = ({ characters, authToken }) => {
     const movePage = useNavigate();
     const [selectedCharacter, setSelectedCharacter] = useState(null);
-    const [chapterNumber, setChapterNumber] = useState([]);
+    const [chpaters, setchpaters] = useState([]);
     const [isScriptOpen, setIsScriptOpen] = useState(false);
 
     const handleCharacterClick = (character) => {
@@ -38,7 +38,7 @@ const CharacterList = ({ characters, authToken }) => {
                 }
                 // chapters 정렬
                 chapters.sort((a, b) => a - b);
-                setChapterNumber(chapters); // chapterNumber 상태 업데이트
+                setchpaters(chapters); // chpaters 상태 업데이트
             })
             .catch((error) => {
                 console.error("목표 정보 조회 중 오류 발생:", error);
@@ -53,10 +53,10 @@ const CharacterList = ({ characters, authToken }) => {
         if (selectedCharacter) {
             const { character_id, name, script } = selectedCharacter;
             return (
-                <div>
-                    {chapterNumber.length !== 0 ? (
-                        <div className={`profile-info`}>
-                            {chapterNumber.map((chapter, index) => (
+                <div className="character-list">
+                    {chpaters.length !== 0 ? (
+                        <div className="chapters">
+                            {chpaters.map((chapter, index) => (
                                 <button className="script-button" key={index} onClick={() => movePage(`/script`, {
                                     state: {
                                         characterId: `${character_id}`,
@@ -64,6 +64,7 @@ const CharacterList = ({ characters, authToken }) => {
                                         scriptId: `${script.script_id}`,
                                         background: `${script.background}`,
                                         genre: `${script.genre}`,
+                                        town: `${script.town}`,
                                         chapter: chapter
                                     }
                                 })}>
@@ -72,18 +73,19 @@ const CharacterList = ({ characters, authToken }) => {
                             ))}
                         </div>
                     ) : (
-                        <button className="script-button" onClick={() => movePage('/script', {
-                            state: {
-                                characterId: `${character_id}`,
-                                characterName: `${name}`,
-                                scriptId: `${script.script_id}`,
-                                background: `${script.background}`,
-                                genre: `${script.genre}`,
-                                chapter: 0
-                            }
-                        })}>
-                            INTRO
-                        </button>
+                    <button className="script-button" onClick={() => movePage('/script', {
+                        state: {
+                            characterId: `${character_id}`,
+                            characterName: `${name}`,
+                            scriptId: `${script.script_id}`,
+                            background: `${script.background}`,
+                            genre: `${script.genre}`,
+                            town: `${script.town}`,
+                            chapter: 0
+                        }
+                    })}>
+                        INTRO
+                    </button>
                     )}
                 </div>
             );
@@ -98,7 +100,7 @@ const CharacterList = ({ characters, authToken }) => {
                 <div key={index}>
                     <div>
                         <div className="triangle-toggle" onClick={() => handleCharacterClick(character)}>
-                            {isScriptOpen ? '▼' : '▶'} {/* 열려있으면 ▼, 닫혀있으면 ▶ */}
+                            <div className="triangle">{isScriptOpen ? '▼' : '▶'} {/* 열려있으면 ▼, 닫혀있으면 ▶ */}</div>
                             <div className="character" >
                                 {character.name}
                             </div>

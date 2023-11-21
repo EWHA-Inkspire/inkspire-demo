@@ -11,10 +11,8 @@ const ChatDisplay = ({ authToken, scriptInfo, chatHistory, setChatHistory }) => 
             });
 
             const data = response.data;
-            if (data && data.data && Array.isArray(data.data)) {
-                setChatHistory(data.data);
-                console.log("gpt 정보: ", data.data);
-            }
+            setChatHistory(data.data);
+            console.log("gpt 정보: ", data.data);
         } catch (error) {
             console.error("초기 채팅 내역을 불러오는 중 오류 발생:", error);
         }
@@ -27,9 +25,14 @@ const ChatDisplay = ({ authToken, scriptInfo, chatHistory, setChatHistory }) => 
     }, [authToken, fetchInitialChat]);
 
     const renderMessages = () => {
+        if(chatHistory.length === 0) {
+            return <div>
+                출력중...
+            </div>
+        }
         return chatHistory.map((message, index) => (
             <div key={index} className={message.role === "assistant" ? "model-message" : "user-message"}>
-                {message.query.split('\n').map((line, lineIndex) => (
+                {message.content.split('\n').map((line, lineIndex) => (
                     <span key={lineIndex}>
                         {line}
                         <br />

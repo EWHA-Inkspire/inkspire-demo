@@ -8,18 +8,28 @@ const UserChat = ({ authToken, scriptInfo, chatHistory, setChatHistory }) => {
     const sendMessage = async () => {
         try {
             const response = await axios.post(
-                `http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/chat`,
-                {}, {
+                `http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/play`,
+                {
+                    history: chatHistory,
+                    query: userInput
+                },
+                {
                     headers: {
                         Authorization: `Token ${authToken}`
                     }
                 }
             );
-            const newMessage = response.data.data[0]; // Assuming single message response
-            setChatHistory([...chatHistory, newMessage]);
-            setUserInput("");
+            
+            const responseData = response.data.data;
+            
+            if (Array.isArray(responseData) && responseData.length > 0) {
+                setChatHistory([...chatHistory, ...responseData]);
+                setUserInput("");
+            } else {
+                console.error("Invalid or empty response data:", responseData);
+            }
         } catch (error) {
-            console.error("채팅 메시지 전송 중 오류 발생:", error);
+            console.error("Error sending chat message:", error);
         }
     };
 
@@ -27,11 +37,11 @@ const UserChat = ({ authToken, scriptInfo, chatHistory, setChatHistory }) => {
         <div className="user-input">
             <input
                 type="text"
-                placeholder="메시지를 입력하세요"
+                placeholder="Enter your message"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
             />
-            <button onClick={sendMessage}>전송</button>
+            <button onClick={sendMessage}>Send</button>
         </div>
     );
 };

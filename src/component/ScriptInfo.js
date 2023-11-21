@@ -58,7 +58,7 @@ const ScriptInfo = ({ authToken, loadProfile }) => {
     
             await axios.post(`http://127.0.0.1:8000/scenario/script/${script_id}/chat`, {
                 role: 'assistant',
-                query: `안녕하세요 ${characterData.name}님. 지금부터 당신을 ${town}에 초대합니다.`,
+                content: `안녕하세요 ${characterData.name}님. 지금부터 당신을 ${town}에 초대합니다.`,
                 chapter: 1
             }, {
                 headers: {
@@ -68,7 +68,7 @@ const ScriptInfo = ({ authToken, loadProfile }) => {
     
             const secondChatResponse = await axios.post(`http://127.0.0.1:8000/scenario/script/${script_id}/chat`, {
                 role: 'assistant',
-                query: town_detail,
+                content: town_detail,
                 chapter: 1
             }, {
                 headers: {

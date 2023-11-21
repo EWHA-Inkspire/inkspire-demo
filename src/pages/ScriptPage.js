@@ -49,6 +49,28 @@ const ScriptPage = () => {
         }
     }, [authToken, scriptInfo.scriptId, createNPC]);
 
+    const gameStart = useCallback(async () => {
+        try {
+            const response = await axios.post(`http://127.0.0.1:8000/scenario/play/intro`, {
+                player_name: scriptInfo.characterName,
+                script_id: scriptInfo.scriptId,
+                background: scriptInfo.background,
+                genre: scriptInfo.genre,
+                town: scriptInfo.town,
+                chapter: scriptInfo.chapter
+            });
+    
+            const data = response.data;
+            if (data && data.data && Array.isArray(data.data)) {
+                setChatHistory([...chatHistory, ...data.data]);
+            } else {
+                console.error("Invalid data format received from server:", data);
+            }
+        } catch (error) {
+            console.error('Error during game start:', error);
+        }
+    }, [chatHistory, scriptInfo]);    
+
     const createGoal = useCallback(async () => {
         try {
             const response = await axios.post(
@@ -61,10 +83,14 @@ const ScriptPage = () => {
                 }
             );
             console.log('목표 생성 요청 결과:', response.data);
+            
+            // 게임 시작
+            gameStart();
+
         } catch (error) {
             console.error('목표 생성 요청 중 오류 발생:', error);
         }
-    }, [authToken, scriptInfo.scriptId, scriptInfo.chapter]);
+    }, [authToken, scriptInfo.scriptId, scriptInfo.chapter, gameStart]);
     
     const getGoal = useCallback(async () => {
         try {
@@ -97,7 +123,7 @@ const ScriptPage = () => {
             const data = response.data;
             console.log(data.data);
         } catch (error) {
-            console.error('목표 조회 중 오류 발생:', error);
+            console.error('스크립트 조회 중 오류 발생:', error);
         }
     }, [authToken, scriptInfo.scriptId]);    
 

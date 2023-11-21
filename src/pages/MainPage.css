@@ -47,7 +47,13 @@
     cursor: pointer;
 }
 
+.triangle {
+    padding: 3px 0px;
+}
+
 .character {
+    text-align: left;
+    padding: 5px 0px;
     margin-left: 5px; /* 버튼 간격 조정 */
     width: calc(100%); /* 입력창과 같은 너비로 버튼을 설정합니다. */
 }
@@ -61,7 +67,7 @@
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: calc(90%); /* 입력창과 같은 너비로 버튼을 설정합니다. */
+    width: calc(100%); /* 입력창과 같은 너비로 버튼을 설정합니다. */
 }
 
 .script-button:hover {
