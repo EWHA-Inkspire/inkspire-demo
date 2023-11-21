@@ -10,6 +10,7 @@
     padding: 20px;
     border-radius: 5px;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .profile-info h2 {
@@ -24,7 +25,7 @@
     padding: 5px;
 }
 
-.profile-info button.logout-button {
+.logout-button {
     background-color: #B0A695;
     color: #fff;
     margin-bottom: 5px;
@@ -33,25 +34,38 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: calc(100%); /* 입력창과 같은 너비로 버튼을 설정합니다. */
 }
 
-.profile-info button.logout-button:hover {
+.logout-button:hover {
     background-color: #776B5D;
 }
 
-.profile-info button.character-button {
+.triangle-toggle {
+    display: flex;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.character {
+    margin-left: 5px; /* 버튼 간격 조정 */
+    width: calc(100%); /* 입력창과 같은 너비로 버튼을 설정합니다. */
+}
+
+.script-button {
     background-color: #EBE3D5;
     color: #776B5D;
     margin-bottom: 5px;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: calc(90%); /* 입력창과 같은 너비로 버튼을 설정합니다. */
 }
 
-.profile-info button:hover {
-  background-color: #DFD7BF;
+.script-button:hover {
+    background-color: #DFD7BF;
 }
 
 .player-input {
@@ -87,6 +101,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: calc(100%); /* 입력창과 같은 너비로 버튼을 설정합니다. */
 }
 
 .player-input button:hover {

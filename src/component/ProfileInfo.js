@@ -13,17 +13,19 @@ const ProfileInfo = ({ authToken, profileData, error }) => {
     };
 
     return (
-        <div className="profile-info">
-            <h2>프로필 정보</h2>
-            {error ? (
-                <p>{error}</p>
-            ) : (
-                <div>
-                    <p>닉네임:&nbsp;&nbsp;{profileData.nickname}</p>
-                    <p>이메일:&nbsp;&nbsp;{profileData.email}</p>
-                    <CharacterList characters={profileData.characters}/>
-                </div>
-            )}
+        <div>
+            <div className="profile-info">
+                <h2>프로필 정보</h2>
+                {error ? (
+                    <p>{error}</p>
+                ) : (
+                    <div>
+                        <p>닉네임:&nbsp;&nbsp;{profileData.nickname}</p>
+                        <p>이메일:&nbsp;&nbsp;{profileData.email}</p>
+                        <CharacterList characters={profileData.characters} authToken={authToken}/>
+                    </div>
+                )}
+            </div>
             {authToken && (
                 <button className="logout-button" onClick={handleLogout}>로그아웃</button>
             )}

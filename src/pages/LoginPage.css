@@ -25,7 +25,7 @@ input {
     width: calc(100% - 22px); /* 버튼 여백까지 고려하여 너비를 조정합니다. */
 }
 
-button {
+.login-button {
     padding: 10px;
     background-color: #007bff;
     color: #fff;
@@ -36,6 +36,6 @@ button {
     width: calc(100%); /* 입력창과 같은 너비로 버튼을 설정합니다. */
 }
 
-button:hover {
+.login-button:hover {
     background-color: #0056b3;
 }

@@ -13,7 +13,7 @@ const ChatDisplay = ({ authToken, scriptInfo, chatHistory, setChatHistory }) => 
             const data = response.data;
             if(data && data.data && Array.isArray(data.data)) {
                 setChatHistory(data.data);
-                console.log(data.data);
+                console.log("gpt 정보: ", data.data);
             }
         })
         .catch((error) => {

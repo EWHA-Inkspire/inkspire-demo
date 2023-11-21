@@ -51,8 +51,8 @@ function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleLogin}>Login</button>
-        <button onClick={handleSignup}>회원가입</button> 
+        <button className="login-button" onClick={handleLogin}>Login</button>
+        <button className="login-button" onClick={handleSignup}>회원가입</button> 
       </div>
     </div>
   );

@@ -27,7 +27,7 @@ const ScriptPage = () => {
     }, [authToken, scriptInfo.scriptId]);
 
     const getNPC = useCallback(() => {
-        // npc 생성
+        // npc 조회
         axios.get(`http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/npc`, {
             headers: {
                 Authorization: `Token ${authToken}`
@@ -39,7 +39,7 @@ const ScriptPage = () => {
             if (data.data.length === 0) {
                 createNPC();
             } else {
-                console.log(data.data);
+                console.log("NPC 정보: ",data.data);
             }
         })
         .catch ((error) => {
@@ -47,11 +47,65 @@ const ScriptPage = () => {
         });
     }, [authToken, scriptInfo.scriptId, createNPC]);
 
+    const createGoal = useCallback(() => {
+        // 목표 생성
+        axios.post(`http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/${scriptInfo.chapter}/goal`, {}, {
+            headers: {
+                Authorization: `Token ${authToken}`
+            }
+        })
+        .then((response) => {
+            console.log('목표 생성 요청 결과:', response.data);
+        })
+        .catch ((error) => {
+            console.error('목표 생성 요청 중 오류 발생:', error);
+        });
+    }, [authToken, scriptInfo.scriptId, scriptInfo.chapter]);
+
+    const getGoal = useCallback(() => {
+        // 목표 조회
+        axios.get(`http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/${scriptInfo.chapter}/goal`, {
+            headers: {
+                Authorization: `Token ${authToken}`
+            }
+        })
+        .then((response) => {
+            const data = response.data;
+            // 목표 데이터가 없는 경우에만 목표 생성 요청
+            if (data.data.length === 0) {
+                createGoal();
+            } else {
+                console.log("챕터 목표 정보: ",data.data);
+            }
+        })
+        .catch ((error) => {
+            console.error('목표 조회 중 오류 발생:', error);
+        });
+    }, [authToken, scriptInfo.scriptId, scriptInfo.chapter, createGoal]);
+
+    const getScript = useCallback(() => {
+        // npc 조회
+        axios.get(`http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}`, {
+            headers: {
+                Authorization: `Token ${authToken}`
+            }
+        })
+        .then((response) => {
+            const data = response.data;
+            console.log(data.data);
+        })
+        .catch ((error) => {
+            console.error('목표 조회 중 오류 발생:', error);
+        });
+    }, [authToken, scriptInfo.scriptId]);
+
     useEffect(() => {
         if (authToken) {
             getNPC();
+            getGoal();
+            getScript();
         }
-    }, [authToken, getNPC, createNPC, scriptInfo.scriptId]);
+    }, [authToken, getNPC, createNPC, getGoal, createGoal, getScript, scriptInfo.scriptId, scriptInfo.chapter]);
 
     return (
         <div className="ScriptPage">
