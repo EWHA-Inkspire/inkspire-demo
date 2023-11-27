@@ -28,27 +28,6 @@ const ScriptPage = () => {
         }
     }, [authToken, scriptInfo.scriptId]);
 
-    const getNPC = useCallback(async () => {
-        try {
-            const response = await axios.get(
-                `http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/npc`,
-                {
-                    headers: {
-                        Authorization: `Token ${authToken}`,
-                    },
-                }
-            );
-            const data = response.data;
-            if (data.data.length === 0) {
-                await createNPC();
-            } else {
-                console.log('NPC 정보: ', data.data);
-            }
-        } catch (error) {
-            console.error('NPC 조회 중 오류 발생:', error);
-        }
-    }, [authToken, scriptInfo.scriptId, createNPC]);
-
     const gameStart = useCallback(async () => {
         try {
             const response = await axios.post(`http://127.0.0.1:8000/scenario/play/intro`, {
@@ -83,35 +62,11 @@ const ScriptPage = () => {
                 }
             );
             console.log('목표 생성 요청 결과:', response.data);
-            
-            // 게임 시작
-            gameStart();
 
         } catch (error) {
             console.error('목표 생성 요청 중 오류 발생:', error);
         }
-    }, [authToken, scriptInfo.scriptId, scriptInfo.chapter, gameStart]);
-    
-    const getGoal = useCallback(async () => {
-        try {
-            const response = await axios.get(
-                `http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/${scriptInfo.chapter}/goal`,
-                {
-                    headers: {
-                        Authorization: `Token ${authToken}`,
-                    },
-                }
-            );
-            const data = response.data;
-            if (data.data.length === 0) {
-                await createGoal();
-            } else {
-                console.log('챕터 목표 정보: ', data.data);
-            }
-        } catch (error) {
-            console.error('목표 조회 중 오류 발생:', error);
-        }
-    }, [authToken, scriptInfo.scriptId, scriptInfo.chapter, createGoal]);
+    }, [authToken, scriptInfo.scriptId, scriptInfo.chapter]);
 
     const getScript = useCallback(async () => {
         try {
@@ -122,21 +77,36 @@ const ScriptPage = () => {
             });
             const data = response.data;
             console.log(data.data);
+            console.log("목표:", data.data['goals']);
+            console.log("NPC:", data.data['npcs']);
+
+            // goals 필드의 길이가 0이면 createGoal
+            if(data.data['goals'].length === 0) {
+                await createGoal();
+            }
+
+            // npcs 필드의 길이가 0이면 createNPC
+            if(data.data['npcs'].length === 0) {
+                await createNPC();
+            }
         } catch (error) {
             console.error('스크립트 조회 중 오류 발생:', error);
+        } finally {
+            if(scriptInfo.chapter === 0) {
+                // 게임 시작
+                gameStart();
+            }
         }
-    }, [authToken, scriptInfo.scriptId]);    
+    }, [authToken, scriptInfo.scriptId, createGoal, createNPC]);    
 
     useEffect(() => {
         const fetchData = async () => {
             if (authToken) {
-                await getNPC();
-                await getGoal();
                 await getScript();
             }
         };
         fetchData();
-    }, [authToken, getNPC, getGoal, getScript]);
+    }, [authToken, getScript]);
 
     return (
         <div className="ScriptPage">

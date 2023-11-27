@@ -1,9 +1,9 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import CharacterList from './CharacterList';
+import { useNavigate } from 'react-router-dom';
+import Character from './Character';
 
 const ProfileInfo = ({ authToken, profileData, error }) => {
-    const movePage = useLocation();
+    const movePage = useNavigate();
 
     const handleLogout = () => {
         // 로컬 스토리지에서 인증 토큰 제거
@@ -22,7 +22,12 @@ const ProfileInfo = ({ authToken, profileData, error }) => {
                     <div>
                         <p>닉네임:&nbsp;&nbsp;{profileData.nickname}</p>
                         <p>이메일:&nbsp;&nbsp;{profileData.email}</p>
-                        <CharacterList characters={profileData.characters} authToken={authToken}/>
+                        <h4>캐릭터 목록</h4>
+                        {profileData.characters.map((character, index) => (
+                            <div key={index}>
+                                <Character character={character} authToken={authToken}/>
+                            </div>
+                        ))}
                     </div>
                 )}
             </div>

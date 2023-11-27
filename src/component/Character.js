@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const CharacterList = ({ characters, authToken }) => {
+const Character = ({ character, authToken }) => {
     const movePage = useNavigate();
     const [selectedCharacter, setSelectedCharacter] = useState(null);
     const [chpaters, setchpaters] = useState([]);
@@ -95,22 +95,15 @@ const CharacterList = ({ characters, authToken }) => {
 
     return (
         <div>
-            <h4>캐릭터 목록</h4>
-            {characters.map((character, index) => (
-                <div key={index}>
-                    <div>
-                        <div className="triangle-toggle" onClick={() => handleCharacterClick(character)}>
-                            <div className="triangle">{isScriptOpen ? '▼' : '▶'} {/* 열려있으면 ▼, 닫혀있으면 ▶ */}</div>
-                            <div className="character" >
-                                {character.name}
-                            </div>
-                        </div>
-                        {displayScriptInfo()}
-                    </div>
+            <div className="triangle-toggle" onClick={() => handleCharacterClick(character)}>
+                <div className="triangle">{isScriptOpen ? '▼' : '▶'} {/* 열려있으면 ▼, 닫혀있으면 ▶ */}</div>
+                <div className="character" >
+                    {character.name}
                 </div>
-            ))}
+            </div>
+            {displayScriptInfo()}
         </div>
     );
 };
 
-export default CharacterList;
+export default Character;
