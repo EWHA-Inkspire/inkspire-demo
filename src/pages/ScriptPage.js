@@ -7,14 +7,14 @@ import UserChat from "../component/UserChat";
 
 const ScriptPage = () => {
     const location = useLocation();
-    const [scriptInfo, setScriptInfo] = useState(location.state);
+    const [scriptInfo, setScriptInfo]= useState(location.state);
     const authToken = localStorage.getItem('authToken');
     const [chatHistory, setChatHistory] = useState([]);
 
     const createNPC = useCallback(async () => {
         try {
             const response = await axios.post(
-                `http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/npc`,
+                `http://0.0.0.0:8000/scenario/script/${scriptInfo.scriptId}/npc`,
                 {},
                 {
                     headers: {
@@ -28,27 +28,28 @@ const ScriptPage = () => {
         }
     }, [authToken, scriptInfo.scriptId]);
 
-    const gameStart = useCallback(async () => {
+    const gameStart = () => {
         try {
-            const response = await axios.post(`http://127.0.0.1:8000/scenario/play/intro`, {
+            const response = axios.post(`http://127.0.0.1:8000/scenario/play/intro`, {
                 player_name: scriptInfo.characterName,
                 script_id: scriptInfo.scriptId,
                 background: scriptInfo.background,
                 genre: scriptInfo.genre,
                 town: scriptInfo.town,
-                chapter: scriptInfo.chapter
+                town_detail: scriptInfo.townDetail,
+                chapter: scriptInfo.chapter,
             });
     
             const data = response.data;
-            if (data && data.data && Array.isArray(data.data)) {
-                setChatHistory([...chatHistory, ...data.data]);
+            if (data && data.data) {
+                setChatHistory([...chatHistory, data.data]);
             } else {
                 console.error("Invalid data format received from server:", data);
             }
         } catch (error) {
             console.error('Error during game start:', error);
         }
-    }, [chatHistory, scriptInfo]);    
+    };   
 
     const createGoal = useCallback(async () => {
         try {
@@ -75,29 +76,38 @@ const ScriptPage = () => {
                     Authorization: `Token ${authToken}`,
                 },
             });
-            const data = response.data;
-            console.log(data.data);
-            console.log("목표:", data.data['goals']);
-            console.log("NPC:", data.data['npcs']);
+            const data = response.data.data;
+            console.log(data);
+            console.log("목표:", data['goals']);
+            console.log("NPC:", data['npcs']);
+            const idx = scriptInfo.chapter === 0 ? 1 : scriptInfo.chapter;
+            if(data['goals'].length !== 0 && data['npcs'].length !== 0) {
+                setScriptInfo({
+                    ...scriptInfo,
+                    "chapter_goal" : data['goals'][idx].title + " " + data['goals'][idx].content,
+                    "final_goal" : data['goals'][0].title + " " + data['goals'][0].content
+                })
+
+                console.log("히스토리 길이 ", chatHistory.length);
+                if(scriptInfo.chapter <= 1 && chatHistory.length === 2) {
+                    // 게임 시작
+                    gameStart();
+                }
+            }
 
             // goals 필드의 길이가 0이면 createGoal
-            if(data.data['goals'].length === 0) {
+            if(data['goals'].length === 0) {
                 await createGoal();
             }
 
             // npcs 필드의 길이가 0이면 createNPC
-            if(data.data['npcs'].length === 0) {
+            if(data['npcs'].length === 0) {
                 await createNPC();
             }
         } catch (error) {
             console.error('스크립트 조회 중 오류 발생:', error);
-        } finally {
-            if(scriptInfo.chapter === 0) {
-                // 게임 시작
-                gameStart();
-            }
         }
-    }, [authToken, scriptInfo.scriptId, createGoal, createNPC]);    
+    }, [authToken, scriptInfo.scriptId, setChatHistory]);    
 
     useEffect(() => {
         const fetchData = async () => {

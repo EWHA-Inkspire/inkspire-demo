@@ -11,7 +11,10 @@ const UserChat = ({ authToken, scriptInfo, chatHistory, setChatHistory }) => {
                 `http://127.0.0.1:8000/scenario/script/${scriptInfo.scriptId}/play`,
                 {
                     history: chatHistory,
-                    query: userInput
+                    query: userInput,
+                    player_name: scriptInfo.characterName,
+                    script_id: scriptInfo.scriptId,
+                    chapter: scriptInfo.chapter === 0 ? 1 : scriptInfo.chapter
                 },
                 {
                     headers: {

@@ -65,6 +65,7 @@ const Character = ({ character, authToken }) => {
                                         background: `${script.background}`,
                                         genre: `${script.genre}`,
                                         town: `${script.town}`,
+                                        townDetail: `${script.town_detail}`,
                                         chapter: chapter
                                     }
                                 })}>
@@ -81,6 +82,7 @@ const Character = ({ character, authToken }) => {
                             background: `${script.background}`,
                             genre: `${script.genre}`,
                             town: `${script.town}`,
+                            townDetail: `${script.town_detail}`,
                             chapter: 0
                         }
                     })}>
